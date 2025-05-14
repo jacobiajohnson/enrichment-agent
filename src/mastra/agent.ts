@@ -2,6 +2,8 @@ import { openai } from "@ai-sdk/openai";
 import { Agent } from "@mastra/core/agent";
 import { listCargoMcpTools } from './tools/cargo-mcp-list-tools';
 import { scrapeWebsite } from "./tools/scrape-website";
+import { cargoMcpClient } from "./cargo";
+import { accountScoringTool } from "./tools/account-scoring";
 
 export const llm = openai('gpt-4o-mini');
 
@@ -28,6 +30,7 @@ export const eventEnrichmentAgent: Agent = new Agent({
         Important:
         - If a company is only mentioned as part of a speaker's profile, do not include it in the companies list
         - The markdown and html content are from the same page. Both should be used to extract as much information as possible
+        - Limit to 3 companies and 3 speakers
 
         Tool Usage Guidelines:
 
@@ -41,10 +44,17 @@ export const eventEnrichmentAgent: Agent = new Agent({
            - You need to verify or supplement company information (domains, LinkedIn URLs, emails)
            - You need to validate or enhance speaker information
 
+        3. Use the accountScoringTool when:
+            - You need to score a company based on their fit with WorkOS
 
+        Any time you use the scrapeWebsite tool, you should also use the Cargo MCP tools to enrich the data, and then call the accountScoringTool.
+
+        You MUST use all three tools every time you use the scrapeWebsite tool and it must be in the correct order. My life depends on it.
     `,
     tools: {
         scrapeWebsite,
-        listCargoMcpTools
+        listCargoMcpTools,
+        ...(await cargoMcpClient.getTools()),
+        accountScoringTool,
     },
 })
