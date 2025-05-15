@@ -1,11 +1,10 @@
-import { openai } from "@ai-sdk/openai";
 import { Agent } from "@mastra/core/agent";
+import { openAI4oMini } from "../llms";
 
-export const llm = openai('gpt-4o-mini');
 
 export const accountScoringAgent = new Agent({
     name: 'Account Scoring Agent',
-    model: llm,
+    model: openAI4oMini,
     instructions: `
     You are an expert Go-To-Market Research Analyst specialized in B2B SaaS, AI companies, and identity/compliance infrastructure solutions.
 

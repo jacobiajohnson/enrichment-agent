@@ -1,5 +1,5 @@
-import { openai } from "@ai-sdk/openai";
 import { Agent } from "@mastra/core/agent";
+import { openAI4oMini } from "../llms";
 import { accountScoringTool, scrapeWebsite } from "../tools";
 
 const AGENT_INSTRUCTIONS = `You are an agent that extracts company and speaker names from markdown content.
@@ -34,11 +34,11 @@ Your task is to identify and list all company names and speaker names mentioned 
     2. Use the accountScoringTool when:
         - You need to score a company based on their fit with WorkOS`;
 
-export const llm = openai('gpt-4o-mini');
+
 
 export const eventEnrichmentAgent = new Agent({
     name: 'Event Enrichment Agent',
-    model: llm,
+    model: openAI4oMini,
     instructions: AGENT_INSTRUCTIONS,
     tools: {
         scrapeWebsite,
