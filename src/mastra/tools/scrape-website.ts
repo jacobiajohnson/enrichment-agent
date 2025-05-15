@@ -16,7 +16,7 @@ export const scrapeWebsite = createTool({
         console.log(`[scrapeWebsite] Starting to scrape URL: ${context.url}`);
 
         try {
-            const app = new FirecrawlApp({ apiKey: 'fc-8d78b1a54701470f933a7a75184e3e59' });
+            const app = new FirecrawlApp({ apiKey: process.env.FIRECRAWL_API_KEY });
             console.log(`[scrapeWebsite] Initialized FirecrawlApp`);
 
             const scrapeResult = await app.scrapeUrl(context.url, {
